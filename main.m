@@ -16,7 +16,7 @@ beta = ones(1,K);% beta_k = 1; %均匀分配权重
 % SNR_dB = 10* log10(SNR);
 
 H = channel(N,K); % 生成信道
-
+% H = conj(H);
 % 生成随机可行解
 % 从可行的一个解开始
 P = eye(K);
@@ -112,7 +112,7 @@ for SNR_dB = -10:2:-10
         end
 
         % 生成功率分配矩阵
-        V_D_t = (V_RF') * (H') * ( H * V_RF * (V_RF') * (H'))^(-1);
+        V_D_t = (V_RF') * (H') / ( H * V_RF * (V_RF') * (H'));
         Q_t = (V_D_t') * (V_RF') * V_RF * V_D_t;
 
         % 迭代求出lambda
@@ -121,8 +121,8 @@ for SNR_dB = -10:2:-10
         % 求出P
         P = zeros(K,K);
         for k = 1:1:K
-            if(temp_p(k) > 0) 
-                P(k,k) = temp_p(k)/Q_t(k,k); 
+            if(temp_p(k) > 0)
+                P(k,k) = temp_p(k)/Q_t(k,k);
             else
                 P(k,k) = 0.001;
             end
@@ -143,7 +143,7 @@ for SNR_dB = -10:2:-10
     end
     
     % 计算V_D
-    V_D = (V_RF') * (H') / ( H *V_RF * (V_RF') *(H'));
+    V_D = (V_RF') * (H') / ( H *V_RF * (V_RF') *(H')) * P^(0.5);
 
     % 计算 R_k 求和
     R = zeros(1,K);

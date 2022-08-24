@@ -10,9 +10,9 @@ while 1
             posi = posi + 1;
         end
     end
-%             initPower / P_t -1;
-%             initPower;
-    if( abs(initPower / P_t -1) <= 0.001 )
+%     initPower / P_t -1
+%     initPower
+    if( abs(initPower / P_t -1) <= 0.0001 )
         disp("found P");
         break;
     end
